@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "81e37be9-c5f5-487e-a449-59690cd07f30",
+		"name": "AdvanceTestCases",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "51304957",
+		"_collection_link": "https://wahidrana-5883251.postman.co/workspace/Wahid-Rana's-Workspace~ea225cf9-54cf-46bc-887f-ee6a68ebd6d2/collection/51304957-81e37be9-c5f5-487e-a449-59690cd07f30?action=share&source=collection_link&creator=51304957"
+	},
+	"item": [
+		{
+			"name": "GetReq",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Check page number\", function(){\r",
+							"    console.log(jsonData.page);\r",
+							"    console.log(jsonData.per_page);\r",
+							"    console.log(jsonData.total_pages);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Check full name\", function(){\r",
+							"    console.log(jsonData.data[2].last_name);\r",
+							"    pm.expect(jsonData.data[2].first_name).to.eql(\"Emma\");\r",
+							"    pm.expect(jsonData.data[2].last_name).to.eql(\"Wong\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check all IDs\", function () {\r",
+							"    console.log('Total users: ', jsonData.data.length);\r",
+							"    for (var i = 0; i < jsonData.data.length; i++) {\r",
+							"        console.log(\"ID:\", jsonData.data[i].id, \"Name:\", jsonData.data[i].first_name, jsonData.data[i].last_name);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "x-api-key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"job\": \"{{$randomJobArea}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOrderID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseUUID = pm.response.json().uuid;\r",
+							"pm.globals.set(\"id\", responseUUID);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://httpbin.org/uuid",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"uuid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"orderId\": \"{{id}}\",\r\n\"products\":[\r\n{\r\n\"quantity\":10,\r\n\"productId\":311\r\n},\r\n{\r\n\"quantity\":50,\r\n\"productId\":312\r\n},\r\n{\r\n\"quantity\":12,\r\n\"productId\":316\r\n}]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/post",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
